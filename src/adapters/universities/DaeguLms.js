@@ -27,7 +27,7 @@ class DaeguLms extends HelloLmsAdapter {
         resolve(success);
       };
 
-      const ssoUrl = 'https://sso.daegu.ac.kr/login.jsp?type=login&ms=10&returnURI=https://lms.daegu.ac.kr/ilos/bandi/sso/index.jsp';
+      const ssoUrl = 'https://sso.daegu.ac.kr/dgusso/ext/lms/login_form.do?Return_Url=https://lms.daegu.ac.kr/ilos/lo/login_sso.acl';
       loginWin.loadURL(ssoUrl);
 
       loginWin.webContents.on('did-finish-load', async () => {
