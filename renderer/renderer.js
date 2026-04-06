@@ -45,6 +45,8 @@ function switchView(viewId) {
 /* ── 로그인 ────────────────────────────────────────────── */
 loginForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  const univIdEl = document.getElementById('login-univ');
+  const univId = univIdEl ? univIdEl.value : 'daegu';
   const id = loginId.value.trim();
   const pw = loginPw.value.trim();
   if (!id || !pw) return;
@@ -54,7 +56,7 @@ loginForm.addEventListener('submit', (e) => {
   loginBtn.querySelector('.btn-loader').style.display = 'flex';
   setLoginStatus('로그인 시도 중...', 'info');
 
-  window.api.send('login', { id, pw });
+  window.api.send('login', { univId, id, pw });
 });
 
 function setLoginStatus(msg, type = '') {

@@ -35,13 +35,26 @@
     <div class="login-card glass">
       <div class="login-logo">
         <div class="logo-circle">
-          <span>DU</span>
+          <span>LMS</span>
         </div>
-        <h1>대구대학교</h1>
-        <p class="login-subtitle">스마트 LMS 크롤러</p>
+        <h1>통합 LMS 크롤러</h1>
+        <p class="login-subtitle">여러 대학의 학습 데이터를 한 곳에서</p>
       </div>
 
       <form id="login-form" autocomplete="off">
+        <div class="input-group">
+          <label for="login-univ">소속 학교</label>
+          <div class="input-wrapper" style="position:relative;">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <select id="login-univ" style="width: 100%; padding: 12px 16px 12px 42px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #fff; font-size: 14px; appearance: none; outline: none; transition: var(--transition);">
+              <option value="daegu" style="background:#1a1f2e;">대구대학교 (Daegu. Univ)</option>
+              <option value="hello" style="background:#1a1f2e;">(테스트) Hello LMS (기본형)</option>
+            </select>
+          </div>
+        </div>
         <div class="input-group">
           <label for="login-id">학번</label>
           <div class="input-wrapper">
