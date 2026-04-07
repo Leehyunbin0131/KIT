@@ -28,7 +28,7 @@ class KnuLms extends HelloLmsAdapter {
       };
 
       // 경북대 자체 SSO → agentId=311이 LMS 연동용
-      const ssoUrl = 'https://appfn.knu.ac.kr/login.knu';
+      const ssoUrl = 'https://appfn.knu.ac.kr/login.knu?agentId=311';
       loginWin.loadURL(ssoUrl);
 
       loginWin.webContents.on('did-finish-load', async () => {
