@@ -161,10 +161,13 @@ window.api.receive('course-list', (courses) => {
     .map(
       (c, i) => `
     <div class="course-card" data-index="${i}">
-      <h4 class="course-name">${escapeHtml(c.name || '과목 ' + (i + 1))}</h4>
-      <p class="course-prof">${escapeHtml(c.code || '')}${c.schedule ? ' · ' + escapeHtml(c.schedule) : ''}${c.term ? ' · ' + escapeHtml(c.term) : ''}</p>
-      <div class="course-stats">
-        <span class="course-stat">데이터 동기화 대기 중...</span>
+      <div class="course-card-header"></div>
+      <div class="course-card-body">
+        <h4 class="course-name">${escapeHtml(c.name || '과목 ' + (i + 1))}</h4>
+        <p class="course-prof">${escapeHtml(c.code || '')}${c.schedule ? ' · ' + escapeHtml(c.schedule) : ''}${c.term ? ' · ' + escapeHtml(c.term) : ''}</p>
+        <div class="course-stats">
+          <span class="course-stat">데이터 동기화 대기 중...</span>
+        </div>
       </div>
     </div>`
     )
@@ -243,6 +246,36 @@ modalOverlay.addEventListener('click', (e) => {
 
 /* ── 탭 렌더링 ─────────────────────────────────────────── */
 function renderTab(tabName, detail) {
+  if (tabName === 'ai') {
+    modalBody.innerHTML = `
+      <div style="display:flex; flex-direction:column; height:100%; min-height:400px; max-height:500px;">
+        <div id="modal-ai-chat" style="flex:1; overflow-y:auto; padding-bottom:16px; display:flex; flex-direction:column; gap:16px;">
+          <div class="chat-msg ai">이 과목에 대해 무엇이든 도와드릴게요! 궁금한 점이 있으신가요?</div>
+        </div>
+        <form id="modal-ai-form" style="display:flex; gap:8px; border-top:1px solid var(--border); padding-top:16px;" autocomplete="off">
+          <input type="text" id="modal-ai-input" placeholder="이 과목에 대해 질문하세요..." style="flex:1; padding:12px 16px; border-radius:8px; border:1px solid var(--border); background:#f8fafc; font-size:14px; outline:none;">
+          <button type="submit" class="btn-primary" style="margin-top:0; padding:12px 24px; border-radius:8px;">전송</button>
+        </form>
+      </div>
+    `;
+    const form = $('#modal-ai-form');
+    const input = $('#modal-ai-input');
+    const chat = $('#modal-ai-chat');
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const txt = input.value.trim();
+      if (!txt) return;
+      chat.insertAdjacentHTML('beforeend', `<div class="chat-msg user">${escapeHtml(txt)}</div>`);
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+      setTimeout(() => {
+        chat.insertAdjacentHTML('beforeend', `<div class="chat-msg ai">아직 실제 AI 백엔드와 연결되지 않았습니다. (질문: ${escapeHtml(txt)})</div>`);
+        chat.scrollTop = chat.scrollHeight;
+      }, 600);
+    };
+    return;
+  }
+
   const data = detail[tabName] || [];
 
   if (!data.length) {
@@ -251,10 +284,10 @@ function renderTab(tabName, detail) {
   }
 
   modalBody.innerHTML = buildTable([], data);
-  modalBody.querySelectorAll('tr.clickable-row').forEach((tr) => {
-    tr.addEventListener('click', () => {
-      const title = tr.getAttribute('data-title') || '상세 보기';
-      const enc = tr.getAttribute('data-link') || '';
+  modalBody.querySelectorAll('.clickable-row').forEach((el) => {
+    el.addEventListener('click', () => {
+      const title = el.getAttribute('data-title') || '상세 보기';
+      const enc = el.getAttribute('data-link') || '';
       let link = '';
       try {
         link = enc ? decodeURIComponent(enc) : '';
@@ -268,32 +301,39 @@ function renderTab(tabName, detail) {
 
 /* ── 유틸리티 ──────────────────────────────────────────── */
 function buildTable(headers, rows) {
-  let thead = '';
-  if (headers && headers.length > 0) {
-    const ths = headers.map((h) => `<th>${escapeHtml(h)}</th>`).join('');
-    thead = `<thead><tr>${ths}</tr></thead>`;
-  }
+  if (!rows || rows.length === 0) return '';
+  const cards = rows.map((row) => {
+    let cells = Array.isArray(row) ? row : (row.cells || []);
+    let content = cells.map((cell, i) => {
+      // Create a row for each cell. If headers are provided, use them as labels.
+      if (typeof cell === 'string' && row.title && cell.trim() === row.title.trim()) {
+        return ''; // Skip printing the identical cell value if it's already the card title
+      }
+      let labelHtml = '';
+      if (headers && headers[i]) {
+        labelHtml = `<span class="card-label">${escapeHtml(headers[i])}</span>`;
+      }
+      return `<div class="card-row">${labelHtml}<span class="card-value">${cell || '-'}</span></div>`;
+    }).join('');
 
-  const trs = rows
-    .map((row) => {
-      // If row is an array, map it quickly
-      if (Array.isArray(row)) {
-        return '<tr>' + row.map((cell) => `<td>${cell || '-'}</td>`).join('') + '</tr>';
-      }
-      // If row is an object with link and cells array
-      if (row.cells && Array.isArray(row.cells)) {
-        const columns = row.cells.map((cell) => `<td>${cell || '-'}</td>`).join('');
-        if (row.link) {
-          const t = escapeHtml(row.title || '상세 보기');
-          const enc = encodeURIComponent(row.link);
-          return `<tr class="clickable-row" data-title="${t}" data-link="${enc}">${columns}</tr>`;
-        }
-        return `<tr>${columns}</tr>`;
-      }
-      return '';
-    })
-    .join('');
-  return `<table class="data-table">${thead}<tbody>${trs}</tbody></table>`;
+    if (!Array.isArray(row) && row.link) {
+      const t = escapeHtml(row.title || '상세 정보');
+      const enc = encodeURIComponent(row.link);
+      return `<div class="data-card clickable-row" data-title="${t}" data-link="${enc}">
+                <div class="card-title">${t}</div>
+                ${content}
+              </div>`;
+    }
+    
+    // Attempt to pull out title if it exists loosely
+    let titleHtml = '';
+    if (!Array.isArray(row) && row.title) {
+        titleHtml = `<div class="card-title">${escapeHtml(row.title)}</div>`;
+    }
+    return `<div class="data-card">${titleHtml}${content}</div>`;
+  }).join('');
+  
+  return `<div class="data-card-grid">${cards}</div>`;
 }
 
 /* ── 상세 모달 로직 ────────────────────────────────────── */
@@ -324,34 +364,8 @@ async function openDetailModal(title, url, courseKey) {
   detailLoading.style.display = 'none';
   detailContent.style.display = 'block';
 
-  let attBlock = '';
-  if (attachments.length > 0) {
-    const buttons = attachments
-      .map((a) => {
-        const name = escapeHtml(a.name || '파일');
-        const u = encodeURIComponent(a.url || '');
-        return `<button type="button" class="btn-lms-dl" data-dl="${u}" style="display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(90,200,250,0.1);color:#9ecbff;cursor:pointer;font-size:13px;">⬇ ${name}</button>`;
-      })
-      .join('');
-    attBlock = `<div class="lms-attachments" style="margin-bottom:14px;padding:12px;border-radius:10px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);"><div style="font-weight:600;margin-bottom:6px;font-size:13px;opacity:0.9;">첨부 / 강의자료 다운로드</div>${buttons}</div>`;
-  }
-
-  detailContent.innerHTML = attBlock + `<div class="detail-body">${contentHtml}</div>`;
-
-  detailContent.querySelectorAll('.btn-lms-dl').forEach((btn) => {
-    btn.addEventListener('click', async (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      const enc = btn.getAttribute('data-dl');
-      let rawUrl = '';
-      try {
-        rawUrl = enc ? decodeURIComponent(enc) : '';
-      } catch (_) {
-        rawUrl = enc || '';
-      }
-      if (rawUrl) await window.api.invoke('download-lms-file', rawUrl);
-    });
-  });
+  // 첨부파일 영역(기존 파싱 오류로 메뉴탭이 들어오던 영역) 제거 요청 처리
+  detailContent.innerHTML = `<div class="detail-body" style="line-height: 1.6; font-size: 14px;">${contentHtml}</div>`;
 }
 
 function buildStatBadges(detail) {
@@ -371,7 +385,7 @@ function buildStatBadges(detail) {
     .slice(0, 5) // 너무 길어지지 않게 상위 5개만 뱃지로 표현
     .map(
       (it) =>
-        `<span class="course-stat" style="font-size:12px;"><span class="stat-dot" style="background:#5ac8fa;"></span>${it.label} ${(detail[it.key] || []).length}</span>`
+        `<span class="course-stat" style="font-size:12px;"><span class="stat-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#4f46e5;"></span>${it.label} ${(detail[it.key] || []).length}</span>`
     )
     .join('');
 }
@@ -415,4 +429,93 @@ function prettifyKey(key) {
   if (dict[key]) return dict[key];
   /* field_ 접두사 제거 */
   return key.replace(/^field_/, '').replace(/_/g, ' ');
+}
+
+/* ── AI 사이드바 로직 ────────────────────────────────────── */
+const aiSidebar = $('#ai-sidebar');
+const toggleSidebarBtn = $('#toggle-sidebar-btn');
+const closeSidebarBtn = $('#close-sidebar-btn');
+const dashView = $('#dashboard-view');
+
+if (toggleSidebarBtn) {
+  toggleSidebarBtn.onclick = () => {
+    if (aiSidebar.style.display === 'flex') {
+      aiSidebar.classList.remove('active');
+      setTimeout(() => aiSidebar.style.display = 'none', 300);
+    } else {
+      aiSidebar.style.display = 'flex';
+      setTimeout(() => aiSidebar.classList.add('active'), 10);
+    }
+  };
+}
+
+if (closeSidebarBtn) {
+  closeSidebarBtn.onclick = () => {
+    aiSidebar.classList.remove('active');
+    setTimeout(() => aiSidebar.style.display = 'none', 300);
+  };
+}
+
+const mainAiForm = $('#main-ai-form');
+const mainAiInput = $('#main-ai-input');
+const mainAiChat = $('#main-ai-chat');
+
+if (mainAiForm) {
+  mainAiForm.onsubmit = (e) => {
+    e.preventDefault();
+    const txt = mainAiInput.value.trim();
+    if (!txt) return;
+    
+    mainAiChat.insertAdjacentHTML('beforeend', `<div class="chat-msg user">${escapeHtml(txt)}</div>`);
+    mainAiInput.value = '';
+    mainAiChat.scrollTop = mainAiChat.scrollHeight;
+
+    setTimeout(() => {
+      mainAiChat.insertAdjacentHTML('beforeend', `<div class="chat-msg ai">실제 학습 데이터 기반 AI 응답이 이곳에 출력됩니다. 감사합니다! (질문: ${escapeHtml(txt)})</div>`);
+      mainAiChat.scrollTop = mainAiChat.scrollHeight;
+    }, 600);
+  };
+}
+
+/* ── 별도 시간표 팝업 로직 ────────────────────────────────────── */
+const toggleScheduleBtn = $('#toggle-schedule-btn');
+const scheduleModal = $('#schedule-modal');
+const scheduleCloseBtn = $('#schedule-close');
+const dailyTimeline = $('#daily-timeline');
+
+if (toggleScheduleBtn) {
+  toggleScheduleBtn.onclick = () => {
+    scheduleModal.style.display = 'flex';
+    renderDailyTimeline();
+  };
+}
+
+if (scheduleCloseBtn) {
+  scheduleCloseBtn.onclick = () => {
+    scheduleModal.style.display = 'none';
+  };
+}
+scheduleModal.addEventListener('click', (e) => {
+  if (e.target === scheduleModal) scheduleModal.style.display = 'none';
+});
+
+function renderDailyTimeline() {
+  if (dailyTimeline.children.length > 0) return; // 이미 렌더링 된 경우
+  const schedule = [
+    { time: '09:00 - 10:15', title: '소프트웨어분석및설계', loc: '공과대학 2호관 201호' },
+    { time: '13:30 - 14:45', title: '컴파일러', loc: '공과대학 1호관 405호' },
+    { time: '15:00 - 16:15', title: '이산수학', loc: '공과대학 2호관 103호' },
+    { time: '17:00 - 18:00', title: '모의해킹 실무 특강', 유정: '온라인 (Zoom)' }
+  ];
+  
+  dailyTimeline.innerHTML = schedule.map(item => `
+    <div class="timeline-item">
+      <span class="timeline-time">${item.time}</span>
+      <h5 class="timeline-title">${item.title}</h5>
+      <div class="timeline-loc">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        ${item.loc || '온라인 (Zoom)'}
+      </div>
+    </div>
+  `).join('');
 }
