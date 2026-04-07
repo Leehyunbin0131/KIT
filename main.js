@@ -4,11 +4,28 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 require('dotenv').config();
+
+/* Chromium 캐시: Desktop/OneDrive 등에서 "Unable to move the cache" (0x5)가 나오는 경우가 있어
+ * 프로필·디스크 캐시를 %LOCALAPPDATA% 아래로 고정합니다. (app.ready 이전에만 setPath 가능) */
+(function configureStableUserData() {
+  const localBase = process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local');
+  const userDataDir = path.join(localBase, 'daegu-lms-crawler');
+  try {
+    fs.mkdirSync(userDataDir, { recursive: true });
+  } catch (_) {}
+  try {
+    app.setPath('userData', userDataDir);
+    app.commandLine.appendSwitch('disk-cache-dir', path.join(userDataDir, 'chromium-disk-cache'));
+    app.commandLine.appendSwitch('disable-gpu-shader-disk-cache');
+  } catch (_) {}
+})();
 
 /* ── URL 상수 및 어댑터 ──────────────────────────────── */
 const DaeguLms = require('./src/adapters/universities/DaeguLms');
 const KnuLms = require('./src/adapters/universities/KnuLms');
+const KmoocLms = require('./src/adapters/universities/KmoocLms');
 
 let currentAdapter = null;
 let mainWin = null;
@@ -94,6 +111,8 @@ app.whenReady().then(() => {
       currentAdapter = new DaeguLms();
     } else if (univId === 'knu') {
       currentAdapter = new KnuLms();
+    } else if (univId === 'kmooc') {
+      currentAdapter = new KmoocLms();
     } 
     else {
       // For future Hello LMS universities, we will add more branches here

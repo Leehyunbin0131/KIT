@@ -4,7 +4,8 @@
   "description": "대구대학교 스마트 LMS 사용자 정보 크롤러",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "node scripts/start.cjs",
+    "start:electron": "electron .",
     "build": "electron-builder"
   },
   "build": {
