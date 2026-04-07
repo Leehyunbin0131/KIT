@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>대구대학교 스마트 LMS</title>
+  <title>Smart Campus Portal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -17,8 +17,8 @@
   <!-- ===== 커스텀 타이틀바 ===== -->
   <header id="titlebar">
     <div class="titlebar-drag">
-      <span class="titlebar-icon">🎓</span>
-      <span class="titlebar-text">대구대학교 스마트 LMS</span>
+      <span class="titlebar-icon">✧</span>
+      <span class="titlebar-text">EduPlatform</span>
     </div>
     <div class="titlebar-controls">
       <button id="btn-minimize" class="tb-btn" aria-label="최소화">─</button>
@@ -29,41 +29,44 @@
 
   <!-- ===== 로그인 뷰 ===== -->
   <section id="login-view" class="view active">
+    <!-- 배경 추상 도형 -->
     <div class="login-bg">
-      <div class="bg-orb orb-1"></div>
-      <div class="bg-orb orb-2"></div>
-      <div class="bg-orb orb-3"></div>
+      <div class="bg-shape shape-1"></div>
+      <div class="bg-shape shape-2"></div>
     </div>
 
-    <div class="login-card glass">
+    <!-- 폼 컨테이너 -->
+    <div class="login-card">
       <div class="login-logo">
         <div class="logo-circle">
-          <span>LMS</span>
+          <span>E</span>
         </div>
-        <h1>통합 LMS 크롤러</h1>
-        <p class="login-subtitle">여러 대학의 학습 데이터를 한 곳에서</p>
+        <h1>EduPlatform</h1>
+        <p class="login-subtitle">스마트 학습 경험을 시작하세요</p>
       </div>
 
       <form id="login-form" autocomplete="off">
+        <!-- 소속 학교 -->
         <div class="input-group">
-          <label for="login-univ">소속 학교</label>
-          <div class="input-wrapper" style="position:relative;">
-            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <label for="login-univ">소속 캠퍼스</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
             </svg>
-            <select id="login-univ"
-              style="width: 100%; padding: 12px 16px 12px 42px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #fff; font-size: 14px; appearance: none; outline: none; transition: var(--transition);">
-              <option value="daegu" style="background:#1a1f2e;">대구대학교 (Daegu. Univ)</option>
-              <option value="hello" style="background:#1a1f2e;">(테스트) Hello LMS (기본형)</option>
-              <option value="knu" style="background:#1a1f2e;">경북대학교 (KNU)</option>
+            <select id="login-univ">
+              <option value="daegu">대구대학교 (Daegu. Univ)</option>
+              <option value="hello">(테스트) Hello LMS (기본형)</option>
+              <option value="knu">경북대학교 (KNU)</option>
             </select>
           </div>
         </div>
+
+        <!-- 학번 입력 -->
         <div class="input-group">
-          <label for="login-id">학번</label>
+          <label for="login-id">학번 / 아이디</label>
           <div class="input-wrapper">
-            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
             </svg>
@@ -71,10 +74,11 @@
           </div>
         </div>
 
+        <!-- 비밀번호 입력 -->
         <div class="input-group">
           <label for="login-pw">비밀번호</label>
           <div class="input-wrapper">
-            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
               <path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
@@ -82,6 +86,7 @@
           </div>
         </div>
 
+        <!-- 로그인 버튼 -->
         <button type="submit" id="login-btn" class="btn-primary">
           <span class="btn-text">로그인</span>
           <div class="btn-loader" style="display:none;">
@@ -91,36 +96,45 @@
       </form>
 
       <div id="login-status" class="status-msg"></div>
-      <p class="login-hint">🔐 로그인 후 2차 인증을 완료해 주세요</p>
+      <p class="login-hint">안전한 로그인을 위해 2차 인증을 준비해 주세요.</p>
     </div>
   </section>
 
   <!-- ===== 대시보드 뷰 ===== -->
-  <section id="dashboard-view" class="view">
+  <section id="dashboard-view" class="view" style="flex-direction:row; padding:0; overflow:hidden;">
+    <div class="dashboard-main" style="flex:1; overflow-y:auto; padding: 32px 40px 48px; display:flex; flex-direction:column; gap:32px;">
     <!-- 상단 프로필 바 -->
-    <div class="dash-header glass">
+    <div class="dash-header">
       <div class="profile-area">
         <div class="profile-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
             <circle cx="12" cy="7" r="4" />
           </svg>
         </div>
         <div class="profile-text">
           <h2 id="profile-name">사용자</h2>
-          <span id="profile-dept" class="profile-sub"></span>
+          <span id="profile-dept" class="profile-sub">학번 등 상세 정보</span>
         </div>
       </div>
       <div class="header-actions">
-        <div id="crawl-status" class="crawl-badge">
+        <button id="toggle-schedule-btn" style="display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:999px; background:#fff; border:1px solid var(--border); font-size:14px; font-weight:700; color:var(--text); cursor:pointer; box-shadow:var(--shadow-sm); transition:all 0.2s;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--text-muted);"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          시간표
+        </button>
+        <button id="toggle-sidebar-btn" style="display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:999px; background:#fff; border:1px solid var(--border); font-size:14px; font-weight:700; color:var(--text); cursor:pointer; box-shadow:var(--shadow-sm); transition:all 0.2s;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="color:var(--accent);"><path d="M12 2a10 10 0 1 0 10 10H12V2z" /></svg>
+          AI 튜터
+        </button>
+        <div id="crawl-status" class="crawl-badge" style="display:none !important;">
           <div class="pulse-dot"></div>
-          <span>크롤링 준비</span>
+          <span>데이터 동기화 준비</span>
         </div>
       </div>
     </div>
 
     <!-- 진행 상황 -->
-    <div id="progress-section" class="progress-section">
+    <div id="progress-section" class="progress-section" style="display:none !important;">
       <div class="progress-bar-track">
         <div id="progress-bar" class="progress-bar-fill"></div>
       </div>
@@ -130,11 +144,11 @@
     <!-- 사용자 정보 카드 -->
     <div id="user-info-section" class="info-section" style="display:none;">
       <h3 class="section-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
           <circle cx="12" cy="7" r="4" />
         </svg>
-        사용자 정보
+        학생 정보
       </h3>
       <div id="user-info-grid" class="info-grid"></div>
     </div>
@@ -142,28 +156,66 @@
     <!-- 과목 카드 그리드 -->
     <div id="courses-section" class="courses-section" style="display:none;">
       <h3 class="section-title">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
-        수강 과목
+        이번 학기 수강 과목
         <span id="course-count" class="badge">0</span>
       </h3>
       <div id="course-grid" class="course-grid"></div>
+    </div>
+
+    <!-- AI 사이드바 (우측 하단 고정 메시지 박스) -->
+    <div id="ai-sidebar" class="ai-sidebar" style="position: fixed; right: 32px; bottom: 32px; width: 380px; height: 600px; max-height: 80vh; z-index: 9999; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 20px; box-shadow: var(--shadow-hover); display: none; flex-direction: column; opacity: 0; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); overflow: hidden;">
+      <div class="ai-sidebar-header" style="padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--accent); color: white;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; margin: 0;">스마트 어시스턴트</h3>
+            <span style="font-size: 11px; opacity: 0.8;">온라인 · 답변 대기중</span>
+          </div>
+        </div>
+        <button id="close-sidebar-btn" style="width: 28px; height: 28px; font-size: 18px; border: none; background: transparent; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.8; transition: opacity 0.2s;">&times;</button>
+      </div>
+
+      <div class="ai-chat-body" id="main-ai-chat" style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #f8fafc;">
+        <div class="chat-msg ai" style="box-shadow: var(--shadow-sm);">
+          안녕하세요! 스마트 어시스턴트입니다. 오늘의 일정이나 과목에 대해 물어보세요!
+        </div>
+      </div>
+      <div class="ai-chat-input" style="padding: 12px 16px; border-top: 1px solid var(--border); background: var(--bg-surface);">
+        <form id="main-ai-form" style="display: flex; gap: 10px;" autocomplete="off">
+          <input type="text" id="main-ai-input" placeholder="메시지를 입력하세요..." style="flex: 1; padding: 12px 16px; border-radius: 24px; border: 1px solid var(--border); background: #f1f5f9; font-size: 14px; outline: none; transition: border-color 0.2s;">
+          <button type="submit" style="width: 42px; height: 42px; border-radius: 50%; border: none; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; box-shadow: var(--shadow-sm); flex-shrink: 0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="transform: translateX(-1px) translateY(1px);"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+      </div>
     </div>
   </section>
 
   <!-- ===== 과목 상세 모달 ===== -->
   <div id="course-modal" class="modal-overlay">
-    <div class="modal glass">
+    <div class="modal modal-large">
       <div class="modal-header">
-        <h2 id="modal-title">과목명</h2>
+        <h2 id="modal-title">강의 상세</h2>
         <button id="modal-close" class="modal-close-btn">&times;</button>
       </div>
 
-      <div class="modal-tabs">
+      <div class="modal-layout-wrapper">
+        <div class="modal-sidebar">
+          <div class="modal-tabs">
+        <button class="tab" data-tab="ai">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a10 10 0 1 0 10 10H12V2z" />
+          </svg>
+          ✨ AI 튜터
+        </button>
         <button class="tab active" data-tab="plan">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
             <polyline points="14 2 14 8 20 8" />
             <line x1="16" y1="13" x2="8" y2="13" />
@@ -173,14 +225,14 @@
           강의계획서
         </button>
         <button class="tab" data-tab="notices">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
             <path d="M13.73 21a2 2 0 0 1-3.46 0" />
           </svg>
           공지사항
         </button>
         <button class="tab" data-tab="qna">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10" />
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
             <line x1="12" y1="17" x2="12.01" y2="17" />
@@ -188,35 +240,34 @@
           질의응답
         </button>
         <button class="tab" data-tab="materials">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
           </svg>
           강의자료
         </button>
         <button class="tab" data-tab="projects">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
             <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
           </svg>
-          팀프로젝트
+          과제/프로젝트
         </button>
         <button class="tab" data-tab="tests">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-            <polygon
-              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
           </svg>
           시험/퀴즈
         </button>
         <button class="tab" data-tab="discuss">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
           토론
         </button>
         <button class="tab" data-tab="clicker">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="12 2 2 7 12 12 22 7 12 2" />
             <polyline points="2 12 12 17 22 12" />
             <polyline points="2 17 12 22 22 17" />
@@ -224,36 +275,53 @@
           투표
         </button>
         <button class="tab" data-tab="survey">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
             <line x1="12" y1="8" x2="12" y2="16" />
             <line x1="8" y1="12" x2="16" y2="12" />
           </svg>
           설문
         </button>
-      </div>
-
-      <div id="modal-body" class="modal-body">
-        <div class="empty-state">데이터를 불러오는 중...</div>
+          </div>
+        </div>
+        <div class="modal-content-area">
+          <div id="modal-body" class="modal-body">
+            <div class="empty-state">데이터 로딩 중...</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== 공지/과제 등 상세 모달 ===== -->
+  <!-- ===== 공지/과제 등 상세 컨텐츠 모달 ===== -->
   <div id="detail-modal" class="modal-overlay" style="display: none; z-index: 6000;">
-    <div class="modal glass" style="max-width: 800px;">
+    <div class="modal" style="max-width: 800px; height: auto; max-height: 85vh;">
       <div class="modal-header">
-        <h2 id="detail-title">상세 내용</h2>
+        <h2 id="detail-title">상세 보기</h2>
         <button id="detail-close" class="modal-close-btn">&times;</button>
       </div>
 
-      <div id="detail-body" class="modal-body"
-        style="background:#f9f9f9; color:#333; padding:20px; border-radius: 0 0 16px 16px; min-height:300px; max-height:600px; overflow-y:auto;">
-        <div id="detail-loading" style="text-align:center; padding:40px;">
-          <div class="spinner border-spinner" style="border-color:#333; border-right-color:transparent;"></div>
-          <p style="margin-top:20px; color:#555;">내용을 불러오는 중...</p>
+      <div id="detail-body" class="modal-body" style="border-radius: 0 0 24px 24px; overflow-y: auto; max-height: calc(85vh - 88px);">
+        <div id="detail-loading" style="text-align:center; padding:60px 20px;">
+          <div class="spinner" style="border-color:#e2e8f0; border-top-color:#4f46e5; margin: 0 auto;"></div>
+          <p style="margin-top:20px; color:#64748b; font-weight: 500;">본문 내용을 불러오는 중입니다...</p>
         </div>
-        <div id="detail-content" style="display:none; line-height: 1.6;"></div>
+        <div id="detail-content" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 별도 시간표 팝업 모달 ===== -->
+  <div id="schedule-modal" class="modal-overlay" style="display: none; z-index: 6000;">
+    <div class="modal" style="max-width: 500px; height: auto; max-height: 85vh;">
+      <div class="modal-header">
+        <h2>📅 오늘의 일정</h2>
+        <button id="schedule-close" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 32px 24px; border-radius: 0 0 24px 24px; background: #f8fafc;">
+        <div id="daily-timeline" class="timeline">
+          <!-- Timetable generated by JS -->
+        </div>
       </div>
     </div>
   </div>
