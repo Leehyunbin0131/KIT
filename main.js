@@ -8,6 +8,7 @@ require('dotenv').config();
 
 /* ── URL 상수 및 어댑터 ──────────────────────────────── */
 const DaeguLms = require('./src/adapters/universities/DaeguLms');
+const KnuLms = require('./src/adapters/universities/KnuLms');
 
 let currentAdapter = null;
 let mainWin = null;
@@ -91,7 +92,10 @@ app.whenReady().then(() => {
     const univId = credentials.univId || 'daegu';
     if (univId === 'daegu') {
       currentAdapter = new DaeguLms();
-    } else {
+    } else if (univId === 'knu') {
+      currentAdapter = new KnuLms();
+    } 
+    else {
       // For future Hello LMS universities, we will add more branches here
       currentAdapter = new DaeguLms(); 
     }
