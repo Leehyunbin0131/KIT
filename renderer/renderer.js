@@ -854,52 +854,22 @@ function renderOverview(univId) {
 
 function renderProgressState(univId) {
   const state = getState(univId);
-  let badgeClass = 'neutral';
-  let badgeText = '연결 준비';
   let chipClass = 'neutral';
   let chipText = '연결 준비';
-  let heading = '데이터를 준비하고 있습니다';
-  let description = state.statusMsg || '로그인 후 수집된 데이터가 이 영역에 표시됩니다.';
 
   if (state.isCrawling) {
-    badgeClass = 'in-progress';
-    badgeText = '동기화 중';
     chipClass = 'in-progress';
     chipText = '동기화 진행';
-    heading = '학습 데이터를 정리하고 있습니다';
-    description = state.statusMsg || '과목과 세부 정보를 순차적으로 불러오고 있습니다.';
   } else if (state.statusMsg.startsWith('❌')) {
-    badgeClass = 'error';
-    badgeText = '오류 발생';
     chipClass = 'error';
     chipText = '확인 필요';
-    heading = '동기화 중 문제가 발생했습니다';
-    description = state.statusMsg;
   } else if (state.isLoggedIn) {
-    badgeClass = 'success';
-    badgeText = '동기화 완료';
     chipClass = 'success';
     chipText = '준비 완료';
-    heading = '학습 환경이 준비되었습니다';
-    description = state.statusMsg || '모든 데이터를 불러왔습니다.';
   }
 
-  crawlStatus.className = `crawl-badge ${badgeClass}`;
-  crawlStatus.querySelector('span').textContent = badgeText;
   dashboardSyncState.className = `status-chip ${chipClass}`;
   dashboardSyncState.textContent = chipText;
-  progressHeading.textContent = heading;
-  progressText.textContent = description;
-
-  progressBar.classList.remove('indeterminate');
-  const progressValue = Math.max(0, Math.min(Math.round(state.progress || 0), 100));
-
-  if (state.isCrawling && progressValue === 0) {
-    progressBar.classList.add('indeterminate');
-    progressBar.style.width = '35%';
-  } else {
-    progressBar.style.width = `${state.isCrawling ? progressValue || 12 : progressValue || 100}%`;
-  }
 }
 
 function renderUserInfo(info) {
@@ -970,11 +940,13 @@ function renderCourseList(univId) {
       return `
         <button type="button" class="course-card" data-index="${index}">
           <div class="course-card-header">
-            <span class="course-chip">${escapeHtml(course.term || getPlatformMeta(univId).name)}</span>
-            <span class="course-sync ${detail ? 'ready' : 'pending'}">${detail ? '세부정보 준비됨' : '동기화 중'}</span>
+            <div class="course-card-header-top">
+              <span class="course-chip">${escapeHtml(course.term || getPlatformMeta(univId).name)}</span>
+              <span class="course-sync ${detail ? 'ready' : 'pending'}">${detail ? '세부정보 준비됨' : '동기화 중'}</span>
+            </div>
+            <h4 class="course-name">${escapeHtml(course.name || `과목 ${index + 1}`)}</h4>
           </div>
           <div class="course-card-body">
-            <h4 class="course-name">${escapeHtml(course.name || `과목 ${index + 1}`)}</h4>
             <p class="course-prof">${escapeHtml(buildCourseCaption(course))}</p>
             <div class="course-meta-row">
               ${metaPills
@@ -1215,7 +1187,10 @@ function buildTable(headers, rows) {
       const title = !Array.isArray(row) && row.title ? escapeHtml(row.title) : '';
       const content = cells
         .map((cell, index) => {
-          if (typeof cell === 'string' && row.title && cell.trim() === row.title.trim()) return '';
+          if (cell === null || cell === undefined) return '';
+          const trimmed = String(cell).trim();
+          if (trimmed === '' || trimmed === '-') return '';
+          if (row.title && trimmed === String(row.title).trim()) return '';
           const label = headers && headers[index] ? headers[index] : '';
           return `
             <div class="card-row">
@@ -1224,6 +1199,7 @@ function buildTable(headers, rows) {
             </div>
           `;
         })
+        .filter(Boolean)
         .join('');
 
       if (!Array.isArray(row) && row.link) {
@@ -1249,7 +1225,7 @@ function buildTable(headers, rows) {
 }
 
 function formatCellValue(cell, label) {
-  if (cell === null || cell === undefined || String(cell).trim() === '') return '-';
+  if (cell === null || cell === undefined || String(cell).trim() === '' || String(cell).trim() === '-') return '';
 
   const value = String(cell).trim();
   const normalizedLabel = String(label || '').toLowerCase();
